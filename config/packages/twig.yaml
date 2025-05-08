@@ -1,0 +1,3 @@
+twig:
+    globals:
+        site_name: 'Symfony Framework'

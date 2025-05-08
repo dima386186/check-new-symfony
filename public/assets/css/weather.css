@@ -1,0 +1,9 @@
+header > h2, .content, .info {
+    text-align: center;
+}
+.info {
+    margin-top: 20px;
+}
+.hide {
+    display: none;
+}

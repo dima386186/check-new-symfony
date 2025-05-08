@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% block head %}
+    <link rel="stylesheet" href="/assets/css/weather.css">
+    <script
+            src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous">
+    </script>
+    <script src="/assets/js/weather.js"></script>
+{% endblock %}
+{% block title %} Weather Info {% endblock %}
+
+{% block body %}
+    <div class="content">
+        <h1>Выбери город:</h1>
+        <select id="city">
+            <option value=""></option>
+            {% for city in cities %}
+                <option value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+        </select>
+        <div class="info">
+            <div class="error detail hide">
+                Ошибка: <span class="error-content"></span>
+            </div>
+            <div class="location detail hide">
+                Текущая погода в: <span class="city"></span>, <span class="country"></span>
+            </div>
+            <div class="temperature detail hide">
+                Температура: <span class="temperature"></span>
+            </div>
+            <div class="condition detail hide">
+                Состояние: <span class="condition"></span>
+            </div>
+            <div class="humidity detail hide">
+                Влажность: <span class="humidity"></span>
+            </div>
+            <div class="wind-speed detail hide">
+                Скорость ветра: <span class="wind-speed"></span>
+            </div>
+            <div class="last-updated detail hide">
+                Последнее обновление: <span class="last-updated"></span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+parameters:
+    app.weather_api_secret: '%env(WEATHER_API_SECRET)%'
+    app.weather_api_base_url: '%env(WEATHER_API_BASE_URL)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Kernel.php}'
+
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    App\Services\Api\WeatherApiService:
+        arguments:
+            $weatherApiKey: '%app.weather_api_secret%'
+            $weatherApiBaseUrl: '%app.weather_api_base_url%'
