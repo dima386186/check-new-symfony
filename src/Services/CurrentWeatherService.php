@@ -50,7 +50,9 @@ class CurrentWeatherService implements WeatherInterface
                 $e->getFile(),
                 $e->getLine()
             ));
-            throw new CurrentWeatherException($e->getMessage(), $e->getCode());
+
+            $exceptionData = json_decode($e->getResponse()->getBody()->getContents(), true);
+            throw new CurrentWeatherException($exceptionData['error']['message'], $e->getCode());
         } catch (Exception $e) {
             throw $e;
         }
