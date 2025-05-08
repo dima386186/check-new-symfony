@@ -16,8 +16,6 @@ class WeatherApiService
 
     protected string $weatherApiKey;
 
-    protected string $weatherApiBaseUrl;
-
     /**
      * WeatherApiService constructor.
      *
