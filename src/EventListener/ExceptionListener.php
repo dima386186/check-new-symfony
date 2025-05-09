@@ -20,6 +20,7 @@ class ExceptionListener
      * ExceptionListener constructor.
      *
      * @param LoggerInterface $mainLogger
+     * @param LoggerInterface $weatherLogger
      */
     public function __construct(LoggerInterface $mainLogger, LoggerInterface $weatherLogger)
     {
