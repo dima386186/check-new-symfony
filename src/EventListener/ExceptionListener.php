@@ -1,6 +1,7 @@
 <?php
 namespace App\EventListener;
 
+use App\Exceptions\CurrentWeatherException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
@@ -11,16 +12,19 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
  */
 class ExceptionListener
 {
-    private LoggerInterface $logger;
+    private LoggerInterface $mainLogger;
+
+    private LoggerInterface $weatherLogger;
 
     /**
      * ExceptionListener constructor.
      *
      * @param LoggerInterface $mainLogger
      */
-    public function __construct(LoggerInterface $mainLogger)
+    public function __construct(LoggerInterface $mainLogger, LoggerInterface $weatherLogger)
     {
-        $this->logger = $mainLogger;
+        $this->mainLogger = $mainLogger;
+        $this->weatherLogger = $weatherLogger;
     }
 
     /**
@@ -29,7 +33,12 @@ class ExceptionListener
     public function __invoke(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
-        $this->logger->error(sprintf(
+        $logger = $this->mainLogger;
+
+        if ($exception instanceof CurrentWeatherException) {
+            $logger = $this->weatherLogger;
+        }
+        $logger->error(sprintf(
             'Exception: %s. Error: %s in %s:%s',
             get_class($exception),
             $exception->getMessage(),

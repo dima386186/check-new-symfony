@@ -25,7 +25,7 @@ class WeatherController extends AbstractController
 
     #[Route(
         '/current-weather',
-        name: 'weather_data',
+        name: 'current_weather',
         methods: ['GET'],
         condition: "request.headers.get('Accept') == 'application/json'"
     )]

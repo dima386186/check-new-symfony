@@ -20,3 +20,7 @@ services:
         arguments:
             $weatherApiKey: '%app.weather_api_secret%'
             $weatherApiBaseUrl: '%app.weather_api_base_url%'
+
+    App\EventListener\ResponseListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

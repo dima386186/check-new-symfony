@@ -4,9 +4,7 @@ namespace App\Services;
 use App\Exceptions\CurrentWeatherException;
 use App\Interfaces\WeatherInterface;
 use App\Services\Api\WeatherApiService;
-use Exception;
 use GuzzleHttp\Exception\GuzzleException;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class WeatherService
@@ -25,36 +23,23 @@ class CurrentWeatherService implements WeatherInterface
      * @param WeatherApiService $api
      * @param LoggerInterface $weatherLogger
      */
-    public function __construct(WeatherApiService $api, LoggerInterface $weatherLogger) {
+    public function __construct(WeatherApiService $api) {
         $this->api = $api;
-        $this->logger = $weatherLogger;
     }
 
     /**
      * @param array $data
      * @return array
      * @throws CurrentWeatherException
-     * @throws Exception
      */
     public function get(array $data): array
     {
         try {
             $currentWeather = $this->api->getCurrentWeather($data);
-
-            $log = " - Погода в {$currentWeather->getCity()}: {$currentWeather->getTemperature()}°C, {$currentWeather->getCondition()}.";
-            $this->logger->info(date('Y-m-d H:i:s') . $log);
         } catch (GuzzleException $e) {
-            $this->logger->error(sprintf(
-                'Error: %s in %s:%s',
-                $e->getMessage(),
-                $e->getFile(),
-                $e->getLine()
-            ));
-
+            $message = 'Weather service is not working.';
             $exceptionData = json_decode($e->getResponse()->getBody()->getContents(), true);
-            throw new CurrentWeatherException($exceptionData['error']['message'], $e->getCode());
-        } catch (Exception $e) {
-            throw $e;
+            throw new CurrentWeatherException($exceptionData['error']['message'] ?? $message, $e->getCode());
         }
 
         return [

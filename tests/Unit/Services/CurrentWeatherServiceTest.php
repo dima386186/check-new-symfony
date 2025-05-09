@@ -9,8 +9,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Mockery;
-use Psr\Log\LoggerInterface;
 use ReflectionClass;
 
 /**
@@ -20,18 +18,6 @@ use ReflectionClass;
  */
 class CurrentWeatherServiceTest extends TestCase
 {
-    private $loggerMock;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $loggerMock = Mockery::mock(LoggerInterface::class);
-        $loggerMock->shouldReceive('info', 'error');
-
-        $this->loggerMock = $loggerMock;
-    }
-
     public function testGet(): void
     {
         $fakeResponseData = [
@@ -45,7 +31,7 @@ class CurrentWeatherServiceTest extends TestCase
 
         $api = $this->setWeatherApiService($fakeResponseBody, 200);
 
-        $currentWeatherService = new CurrentWeatherService($api, $this->loggerMock);
+        $currentWeatherService = new CurrentWeatherService($api);
         $result = $currentWeatherService->get([]);
 
         $this->assertEquals('Austin', $result['city']);
@@ -57,7 +43,7 @@ class CurrentWeatherServiceTest extends TestCase
     {
         $api = $this->setWeatherApiService(json_encode(['error' => 'message']), 400);
 
-        $currentWeatherService = new CurrentWeatherService($api, $this->loggerMock);
+        $currentWeatherService = new CurrentWeatherService($api);
 
         $this->expectException(CurrentWeatherException::class);
 
@@ -75,7 +61,12 @@ class CurrentWeatherServiceTest extends TestCase
                 ->willThrowException(
                     new RequestException(
                         'API connection failed',
-                        new Request('GET', 'current.json')
+                        new Request('GET', 'current.json'),
+                        new Response(
+                            $statusCode,
+                            ['Content-Type' => 'application/json'],
+                            '{"error": "some error"}'
+                        )
                     )
                 );
         } else {

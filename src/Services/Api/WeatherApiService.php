@@ -31,7 +31,6 @@ class WeatherApiService
      * @param array $data
      * @return CurrentWeatherInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Exception
      */
     public function getCurrentWeather(array $data): CurrentWeatherInterface
     {
