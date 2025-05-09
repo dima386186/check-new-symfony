@@ -23,4 +23,4 @@ services:
 
     App\EventListener\ResponseListener:
         tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            - { name: kernel.event_listener, event: kernel.response }
