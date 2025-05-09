@@ -38,6 +38,7 @@ class ExceptionListener
         if ($exception instanceof CurrentWeatherException) {
             $logger = $this->weatherLogger;
         }
+
         $logger->error(sprintf(
             'Exception: %s. Error: %s in %s:%s',
             get_class($exception),

@@ -15,13 +15,10 @@ class CurrentWeatherService implements WeatherInterface
 {
     protected WeatherApiService $api;
 
-    protected LoggerInterface $logger;
-
     /**
      * WeatherService constructor.
      *
      * @param WeatherApiService $api
-     * @param LoggerInterface $weatherLogger
      */
     public function __construct(WeatherApiService $api) {
         $this->api = $api;
@@ -37,7 +34,7 @@ class CurrentWeatherService implements WeatherInterface
         try {
             $currentWeather = $this->api->getCurrentWeather($data);
         } catch (GuzzleException $e) {
-            $message = 'Weather service is not working.';
+            $message = 'We have no message.';
             $exceptionData = json_decode($e->getResponse()->getBody()->getContents(), true);
             throw new CurrentWeatherException($exceptionData['error']['message'] ?? $message, $e->getCode());
         }
